@@ -46,6 +46,16 @@ contract bank {
         return loanFund;
     }
 
+    //get owner address
+        function getOwner() public view returns(address){
+        return( owner);
+    }
+
+
+    function accountExists() public view returns(bool){
+        return userBase[msg.sender].userId!=0;
+    }
+
     //this modifer will check whether user exists or not
     modifier userExist() {
         require(userBase[msg.sender].userId != 0, "Account Doesn't Exist");
@@ -332,9 +342,11 @@ contract bank {
 
     function withdrawLoanFund(uint256 money) public {
         require(userBase[msg.sender].balances > 0, "Funds not Avaialable");
-        require(loanFund >= money, "Enter valid amount");
+        require(loanFund > money, "Enter valid amount");
         require(msg.sender == owner, "Only owner can withdraw funds");
         loanFund -= money;
         payable(owner).transfer(money);
     }
+
+ 
 }
